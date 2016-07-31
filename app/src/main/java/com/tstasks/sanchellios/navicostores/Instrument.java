@@ -1,9 +1,12 @@
 package com.tstasks.sanchellios.navicostores;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by alex on 28.07.16.
  */
-public class Instrument {
+public class Instrument implements Parcelable{
     private int id;
     private String brand;
     private String model;
@@ -17,6 +20,26 @@ public class Instrument {
         this.setType(type);
         this.setPrice(price);
     }
+
+    protected Instrument(Parcel in) {
+        id = in.readInt();
+        brand = in.readString();
+        model = in.readString();
+        type = in.readString();
+        price = in.readDouble();
+    }
+
+    public static final Creator<Instrument> CREATOR = new Creator<Instrument>() {
+        @Override
+        public Instrument createFromParcel(Parcel in) {
+            return new Instrument(in);
+        }
+
+        @Override
+        public Instrument[] newArray(int size) {
+            return new Instrument[size];
+        }
+    };
 
     public int getId() {
         return id;
@@ -56,5 +79,19 @@ public class Instrument {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(id);
+        parcel.writeString(brand);
+        parcel.writeString(model);
+        parcel.writeString(type);
+        parcel.writeDouble(price);
     }
 }

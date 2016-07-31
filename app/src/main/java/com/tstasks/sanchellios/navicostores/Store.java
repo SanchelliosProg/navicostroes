@@ -1,11 +1,14 @@
 package com.tstasks.sanchellios.navicostores;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.ArrayList;
 
 /**
  * Created by alex on 28.07.16.
  */
-public class Store {
+public class Store implements Parcelable{
     private int id;
     private String name;
     private String address;
@@ -21,6 +24,27 @@ public class Store {
         this.setLocation(location);
         instruments = new ArrayList<>();
     }
+
+    protected Store(Parcel in) {
+        id = in.readInt();
+        name = in.readString();
+        address = in.readString();
+        phone = in.readString();
+        location = in.readParcelable(Location.class.getClassLoader());
+        instruments = in.createTypedArrayList(InstrumentProfile.CREATOR);
+    }
+
+    public static final Creator<Store> CREATOR = new Creator<Store>() {
+        @Override
+        public Store createFromParcel(Parcel in) {
+            return new Store(in);
+        }
+
+        @Override
+        public Store[] newArray(int size) {
+            return new Store[size];
+        }
+    };
 
     public void addInstrumentProfile(InstrumentProfile instrumentProfile){
         getInstruments().add(instrumentProfile);
@@ -73,5 +97,20 @@ public class Store {
 
     public void setInstruments(ArrayList<InstrumentProfile> instruments) {
         this.instruments = instruments;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(id);
+        parcel.writeString(name);
+        parcel.writeString(address);
+        parcel.writeString(phone);
+        parcel.writeParcelable(location, i);
+        parcel.writeTypedList(instruments);
     }
 }
