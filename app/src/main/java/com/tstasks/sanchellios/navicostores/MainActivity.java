@@ -13,11 +13,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ArrayList<Store> mStores = new ArrayList<>();
-        mStores.add(new Store(0, "Babooshka", "xxx", "02", null));
-        mStores.add(new Store(1, "Liubava", "yyy", "03", null));
-        Bundle args = new Bundle();
-        args.putParcelableArrayList("STORES", mStores);
+
 
     }
 }
