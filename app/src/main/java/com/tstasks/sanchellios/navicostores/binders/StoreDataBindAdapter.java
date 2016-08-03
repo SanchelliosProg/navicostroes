@@ -1,7 +1,6 @@
 package com.tstasks.sanchellios.navicostores.binders;
 
-import com.tstasks.sanchellios.navicostores.Store;
-import com.tstasks.sanchellios.navicostores.binders.StoreBinder;
+import com.tstasks.sanchellios.navicostores.store_data.Store;
 
 /**
  * Created by alex on 02.08.16.

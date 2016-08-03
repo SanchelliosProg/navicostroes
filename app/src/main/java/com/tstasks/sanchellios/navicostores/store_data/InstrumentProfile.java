@@ -1,4 +1,4 @@
-package com.tstasks.sanchellios.navicostores;
+package com.tstasks.sanchellios.navicostores.store_data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
