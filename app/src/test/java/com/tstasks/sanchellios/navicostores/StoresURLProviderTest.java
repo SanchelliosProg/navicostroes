@@ -1,5 +1,7 @@
 package com.tstasks.sanchellios.navicostores;
 
+import com.tstasks.sanchellios.navicostores.networking.StoresURLProvider;
+
 import org.junit.Before;
 import org.junit.Test;
 

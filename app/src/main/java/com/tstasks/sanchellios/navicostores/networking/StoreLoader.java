@@ -1,4 +1,4 @@
-package com.tstasks.sanchellios.navicostores;
+package com.tstasks.sanchellios.navicostores.networking;
 
 import android.content.AsyncTaskLoader;
 import android.content.Context;

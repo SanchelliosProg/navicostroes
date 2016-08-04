@@ -6,8 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.tstasks.sanchellios.navicostores.R;
-import com.tstasks.sanchellios.navicostores.StoreLoader;
-import com.tstasks.sanchellios.navicostores.StoresURLProvider;
+import com.tstasks.sanchellios.navicostores.networking.StoreLoader;
+import com.tstasks.sanchellios.navicostores.networking.StoresURLProvider;
 import com.tstasks.sanchellios.navicostores.store_data.Store;
 
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package com.tstasks.sanchellios.navicostores;
+package com.tstasks.sanchellios.navicostores.networking;
 
 /**
  * Created by alex on 04.08.16.
