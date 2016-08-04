@@ -8,16 +8,16 @@ import android.os.Parcelable;
  */
 public class Location implements Parcelable{
     private String latitude;
-    private String longtitude;
+    private String longitude;
 
     public Location(String latitude, String longtitude){
         this.setLatitude(latitude);
-        this.setLongtitude(longtitude);
+        this.setLongitude(longtitude);
     }
 
     protected Location(Parcel in) {
         latitude = in.readString();
-        longtitude = in.readString();
+        longitude = in.readString();
     }
 
     public static final Creator<Location> CREATOR = new Creator<Location>() {
@@ -40,12 +40,12 @@ public class Location implements Parcelable{
         this.latitude = latitude;
     }
 
-    public String getLongtitude() {
-        return longtitude;
+    public String getLongitude() {
+        return longitude;
     }
 
-    public void setLongtitude(String longtitude) {
-        this.longtitude = longtitude;
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
     }
 
     @Override
@@ -56,6 +56,6 @@ public class Location implements Parcelable{
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(latitude);
-        parcel.writeString(longtitude);
+        parcel.writeString(longitude);
     }
 }
