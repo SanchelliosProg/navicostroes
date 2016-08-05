@@ -47,7 +47,13 @@ public class Store implements Parcelable{
     };
 
     public void addInstrumentProfile(InstrumentProfile instrumentProfile){
-        getInstruments().add(instrumentProfile);
+        try{
+            this.instruments.add(instrumentProfile);
+        }catch (NullPointerException ex){
+            ex.printStackTrace();
+            this.instruments = new ArrayList<>();
+            this.instruments.add(instrumentProfile);
+        }
     }
 
 

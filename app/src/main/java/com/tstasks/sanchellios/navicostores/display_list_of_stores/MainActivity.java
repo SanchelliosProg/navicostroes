@@ -66,6 +66,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     }
 
     private StoreLoader createStoreLoader(){
-        return new StoreLoader(getApplicationContext(), StoresURLProvider.getStoresURL(), Store.class);
+        return new StoreLoader(getApplicationContext());
     }
 }
