@@ -14,7 +14,7 @@ public class Store implements Parcelable{
     private String address;
     private String phone;
     private Location location;
-    private ArrayList<InstrumentProfile> instruments;
+    private ArrayList<InstrumentProfile> instruments = new ArrayList<>();
 
     public Store(int id, String name, String address, String phone, Location location){
         this.setId(id);
@@ -22,7 +22,6 @@ public class Store implements Parcelable{
         this.setAddress(address);
         this.setPhone(phone);
         this.setLocation(location);
-        instruments = new ArrayList<>();
     }
 
     protected Store(Parcel in) {

@@ -9,10 +9,6 @@ import static org.junit.Assert.*;
 
 public class StoresURLProviderTest {
 
-    @Before
-    public void setUp() throws Exception {
-
-    }
 
     @Test
     public void testGetStoresURL() throws Exception {

@@ -13,6 +13,7 @@ import com.tstasks.sanchellios.navicostores.R;
 import com.tstasks.sanchellios.navicostores.store_data.Store;
 
 import java.util.ArrayList;
+import java.util.jar.Manifest;
 
 
 /**
@@ -21,6 +22,8 @@ import java.util.ArrayList;
 public class StoreRecyclerFragment extends Fragment {
     public static final String STORES_KEY = "STORES";
     private ArrayList<Store> stores;
+    private final String[] permissions = new String[]{android.Manifest.permission.CALL_PHONE,
+            android.Manifest.permission.READ_PHONE_STATE};
 
     public StoreRecyclerFragment() {
         // Required empty public constructor
@@ -37,12 +40,14 @@ public class StoreRecyclerFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        requestPermissions(permissions, 0);
         RecyclerView recyclerView =
                 (RecyclerView) inflater.inflate(R.layout.fragment_store_recycler, container, false);
         stores = getArguments().getParcelableArrayList(STORES_KEY);
 
 
-        StoreAdapter adapter = new StoreAdapter(stores);
+        StoreAdapter adapter = new StoreAdapter(stores, getContext());
         recyclerView.setAdapter(adapter);
 
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());

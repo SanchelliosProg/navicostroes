@@ -11,6 +11,7 @@ import com.tstasks.sanchellios.navicostores.networking.StoresURLProvider;
 import com.tstasks.sanchellios.navicostores.store_data.Store;
 
 import java.util.ArrayList;
+import java.util.jar.Manifest;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<ArrayList<Store>> {
 
@@ -68,4 +69,5 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private StoreLoader createStoreLoader(){
         return new StoreLoader(getApplicationContext());
     }
+
 }
