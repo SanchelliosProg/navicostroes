@@ -12,6 +12,7 @@ import static org.junit.Assert.assertEquals;
 public class PhoneFormatterTest {
     @Test
     public void testPhoneFormatter(){
-        assertEquals("00009990099", PhoneFormatter.getReformattedPhone("0 (000) 999-00-99"));
+        PhoneFormatter phoneFormatter = new PhoneFormatter();
+        assertEquals("00009990099", phoneFormatter.getReformattedPhone("0 (000) 999-00-99"));
     }
 }

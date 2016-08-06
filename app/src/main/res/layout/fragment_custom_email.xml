@@ -1,0 +1,42 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="4dp"
+        tools:context="com.tstasks.sanchellios.navicostores.CustomEmailFragment">
+
+
+        <EditText
+            android:id="@+id/custom_email_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:hint="@string/enter_email"
+            android:inputType="textEmailAddress"
+            android:padding="4dp"
+            android:textSize="24sp"
+            tools:text="email@web.net">
+            <requestFocus/>
+        </EditText>
+
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/email_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/custom_email_edit_text"
+            android:layout_alignParentBottom="true"
+            android:src="@drawable/ic_email_black_24dp"
+            app:elevation="4dp"/>
+
+    </RelativeLayout>
+</layout>
+
+
+
+
+
+

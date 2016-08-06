@@ -5,6 +5,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="emailing_is_impossible">Написать письмо невозможно</string>
     <string name="no_email">Информация об email магазина отсутствует, желаете ввести адрес вручную?</string>
+    <string name="enter_email">Введите e-mail магазина</string>
     <string name="yes">да</string>
     <string name="no">нет</string>
 </resources>

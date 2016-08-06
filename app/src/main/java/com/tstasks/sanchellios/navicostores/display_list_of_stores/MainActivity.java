@@ -7,6 +7,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.tstasks.sanchellios.navicostores.CustomEmailFragment;
 import com.tstasks.sanchellios.navicostores.R;
 import com.tstasks.sanchellios.navicostores.networking.StoreLoader;
 import com.tstasks.sanchellios.navicostores.store_data.Store;
@@ -60,6 +61,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private void updateStoreRecyclerFragment(ArrayList<Store> stores){
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.store_container, StoreRecyclerFragment.newInstance(stores))
+                .addToBackStack(null)
+                .commit();
+    }
+
+    private void moveToCustomEamilFragment(){
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.store_container, CustomEmailFragment.newInstance())
+                .addToBackStack(null)
                 .commit();
     }
 
@@ -88,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                //TODO: Fragment transaction
+                moveToCustomEamilFragment();
             }
         });
         AlertDialog dialog = builder.create();

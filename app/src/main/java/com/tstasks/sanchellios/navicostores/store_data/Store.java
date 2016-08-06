@@ -2,6 +2,7 @@ package com.tstasks.sanchellios.navicostores.store_data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -53,7 +54,7 @@ public class Store implements Parcelable{
         try{
             this.instruments.add(instrumentProfile);
         }catch (NullPointerException ex){
-            ex.printStackTrace();
+            Log.d(this.getClass().toString(), "Instrument profiles init");
             this.instruments = new ArrayList<>();
             this.instruments.add(instrumentProfile);
         }
