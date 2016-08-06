@@ -14,15 +14,17 @@ public class Store implements Parcelable{
     private String address;
     private String phone;
     private String website;
+    private String email;
     private Location location;
     private ArrayList<InstrumentProfile> instruments = new ArrayList<>();
 
-    public Store(int id, String name, String address, String phone, String website, Location location){
+    public Store(int id, String name, String address, String phone, String website, String email, Location location){
         this.setId(id);
         this.setName(name);
         this.setAddress(address);
         this.setPhone(phone);
         this.setWebsite(website);
+        this.setEmail(email);
         this.setLocation(location);
     }
 
@@ -110,6 +112,7 @@ public class Store implements Parcelable{
         parcel.writeString(address);
         parcel.writeString(phone);
         parcel.writeString(website);
+        parcel.writeString(email);
         parcel.writeParcelable(location, i);
         parcel.writeTypedList(instruments);
     }
@@ -120,5 +123,13 @@ public class Store implements Parcelable{
 
     public void setWebsite(String website) {
         this.website = website;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

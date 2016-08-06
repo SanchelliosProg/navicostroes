@@ -1,7 +1,9 @@
 package com.tstasks.sanchellios.navicostores.display_list_of_stores;
 
 import android.app.LoaderManager;
+import android.content.DialogInterface;
 import android.content.Loader;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -11,7 +13,7 @@ import com.tstasks.sanchellios.navicostores.store_data.Store;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<ArrayList<Store>> {
+public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<ArrayList<Store>>, StoreAdapter.StoreInfoAvailabilityListener {
 
     private final String STORES_LOADED_STATE = "STORES_LOADED_STATE";
     private final String STORES_LIST = "STORES_LIST";
@@ -38,9 +40,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public Loader<ArrayList<Store>> onCreateLoader(int i, Bundle bundle) {
-        Loader<ArrayList<Store>> loader = null;
-        loader = createStoreLoader();
-        return loader;
+//        Loader<ArrayList<Store>> loader = null;
+//        loader = createStoreLoader();
+        return createStoreLoader();
     }
 
     @Override
@@ -70,5 +72,31 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         super.onSaveInstanceState(outState);
         outState.putBoolean(STORES_LOADED_STATE, isStoresLoaded);
         outState.putParcelableArrayList(STORES_LIST, stores);
+    }
+
+    @Override
+    public void callEmailDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.emailing_is_impossible)
+                .setMessage(R.string.no_email);
+        builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+        builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //TODO: Fragment transaction
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    @Override
+    public void callWebsiteDialog() {
+
     }
 }
