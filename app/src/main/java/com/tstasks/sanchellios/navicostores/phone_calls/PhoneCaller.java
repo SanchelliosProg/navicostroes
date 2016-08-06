@@ -18,15 +18,12 @@ public class PhoneCaller {
         formatter = new PhoneFormatter();
         this.context = context;
     }
-    public void phoneCall(String phoneNumber) {
+    public Intent getPhoneCallIntent(String phoneNumber) {
         String formattedPhoneNumber = formatter.getReformattedPhone(phoneNumber);
         Intent phoneIntent = new Intent(Intent.ACTION_CALL);
         phoneIntent.setData(Uri.parse("tel:" + formattedPhoneNumber));
         Log.i("Phone number", formattedPhoneNumber);
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-        context.startActivity(phoneIntent);
+        return phoneIntent;
     }
 
 }

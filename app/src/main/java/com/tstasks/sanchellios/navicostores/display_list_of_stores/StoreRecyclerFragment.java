@@ -1,7 +1,9 @@
 package com.tstasks.sanchellios.navicostores.display_list_of_stores;
 
 
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -40,8 +42,10 @@ public class StoreRecyclerFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        if (ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(permissions, 0);
+        }
 
-        requestPermissions(permissions, 0);
         RecyclerView recyclerView =
                 (RecyclerView) inflater.inflate(R.layout.fragment_store_recycler, container, false);
         stores = getArguments().getParcelableArrayList(STORES_KEY);

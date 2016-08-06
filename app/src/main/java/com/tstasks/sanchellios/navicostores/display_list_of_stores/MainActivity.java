@@ -7,20 +7,17 @@ import android.os.Bundle;
 
 import com.tstasks.sanchellios.navicostores.R;
 import com.tstasks.sanchellios.navicostores.networking.StoreLoader;
-import com.tstasks.sanchellios.navicostores.networking.StoresURLProvider;
 import com.tstasks.sanchellios.navicostores.store_data.Store;
 
 import java.util.ArrayList;
-import java.util.jar.Manifest;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<ArrayList<Store>> {
 
-    //Load States
-    private int LOAD_STATE;
+    private final String STORES_LOADED_STATE = "STORES_LOADED_STATE";
+    private final String STORES_LIST = "STORES_LIST";
+
+    private boolean isStoresLoaded = false;
     public final int LOAD_STORES = 0;
-    //TODO: Load loaction state if necessary
-    //TODO: Load Instrument profile if necessary
-    //TODO: Load Instrument if necessary
 
     private ArrayList<Store> stores;
 
@@ -28,24 +25,21 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        LOAD_STATE = LOAD_STORES;
-        stores = new ArrayList<>();
-        //TODO replace it with the loaded from internet
-//        stores = new ArrayList<>();
-//        stores.add(new Store(0, "Babooshka", "ulitsa Kutsygina, 35/1, Voronezh", "8 (473) 277-78-58", null));
-//        stores.add(new Store(1, "Liubava", "ulitsa 20-letiya Oktabrya, 52, Voronezh", "8 (473) 277-35-29", null));
-//        updateStoreRecyclerFragment(stores);
-        Bundle bundle = new Bundle();
-        getLoaderManager().initLoader(LOAD_STATE, bundle, this).forceLoad();
-
+        if(savedInstanceState != null){
+            isStoresLoaded = savedInstanceState.getBoolean(STORES_LOADED_STATE);
+            stores = savedInstanceState.getParcelableArrayList(STORES_LIST);
+        }else {
+            stores = new ArrayList<>();
+        }
+        if(!isStoresLoaded){
+            getLoaderManager().initLoader(LOAD_STORES, null, this).forceLoad();
+        }
     }
 
     @Override
     public Loader<ArrayList<Store>> onCreateLoader(int i, Bundle bundle) {
         Loader<ArrayList<Store>> loader = null;
-        if(LOAD_STATE == LOAD_STORES){
-            loader = createStoreLoader();
-        }
+        loader = createStoreLoader();
         return loader;
     }
 
@@ -53,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     public void onLoadFinished(Loader<ArrayList<Store>> loader, ArrayList<Store> stores) {
         this.stores = stores;
         updateStoreRecyclerFragment(this.stores);
+        isStoresLoaded = true;
     }
 
     @Override
@@ -70,4 +65,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         return new StoreLoader(getApplicationContext());
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(STORES_LOADED_STATE, isStoresLoaded);
+        outState.putParcelableArrayList(STORES_LIST, stores);
+    }
 }

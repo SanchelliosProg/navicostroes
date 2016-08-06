@@ -43,7 +43,7 @@ public class StoreAdapter extends RecyclerView.Adapter<StoreAdapter.ViewHolder> 
         holder.binding.phoneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                phoneCaller.phoneCall(currentStore.getPhone());
+                context.startActivity(phoneCaller.getPhoneCallIntent(currentStore.getPhone()));
             }
         });
 
