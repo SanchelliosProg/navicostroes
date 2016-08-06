@@ -13,14 +13,16 @@ public class Store implements Parcelable{
     private String name;
     private String address;
     private String phone;
+    private String website;
     private Location location;
     private ArrayList<InstrumentProfile> instruments = new ArrayList<>();
 
-    public Store(int id, String name, String address, String phone, Location location){
+    public Store(int id, String name, String address, String phone, String website, Location location){
         this.setId(id);
         this.setName(name);
         this.setAddress(address);
         this.setPhone(phone);
+        this.setWebsite(website);
         this.setLocation(location);
     }
 
@@ -96,14 +98,6 @@ public class Store implements Parcelable{
         this.location = location;
     }
 
-    public ArrayList<InstrumentProfile> getInstruments() {
-        return instruments;
-    }
-
-    public void setInstruments(ArrayList<InstrumentProfile> instruments) {
-        this.instruments = instruments;
-    }
-
     @Override
     public int describeContents() {
         return 0;
@@ -115,7 +109,16 @@ public class Store implements Parcelable{
         parcel.writeString(name);
         parcel.writeString(address);
         parcel.writeString(phone);
+        parcel.writeString(website);
         parcel.writeParcelable(location, i);
         parcel.writeTypedList(instruments);
+    }
+
+    public String getWebsite() {
+        return website;
+    }
+
+    public void setWebsite(String website) {
+        this.website = website;
     }
 }
