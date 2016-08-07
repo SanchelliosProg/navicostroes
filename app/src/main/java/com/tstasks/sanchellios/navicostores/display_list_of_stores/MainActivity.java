@@ -3,21 +3,31 @@ package com.tstasks.sanchellios.navicostores.display_list_of_stores;
 import android.app.LoaderManager;
 import android.content.DialogInterface;
 import android.content.Loader;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
-import com.tstasks.sanchellios.navicostores.CustomEmailFragment;
+import com.tstasks.sanchellios.navicostores.email_sending.EmailFragment;
 import com.tstasks.sanchellios.navicostores.R;
 import com.tstasks.sanchellios.navicostores.networking.StoreLoader;
 import com.tstasks.sanchellios.navicostores.store_data.Store;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<ArrayList<Store>>, StoreAdapter.StoreInfoAvailabilityListener {
+public class MainActivity extends AppCompatActivity
+        implements LoaderManager.LoaderCallbacks<ArrayList<Store>>,
+        StoreInfoAvailabilityListener,
+        Refreshable {
 
     private final String STORES_LOADED_STATE = "STORES_LOADED_STATE";
     private final String STORES_LIST = "STORES_LIST";
+    private Fragment currentFragment;
+    private Menu menu;
+    private MenuItem sendMailMenuButton;
 
     private boolean isStoresLoaded = false;
     public final int LOAD_STORES = 0;
@@ -41,15 +51,13 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public Loader<ArrayList<Store>> onCreateLoader(int i, Bundle bundle) {
-//        Loader<ArrayList<Store>> loader = null;
-//        loader = createStoreLoader();
         return createStoreLoader();
     }
 
     @Override
     public void onLoadFinished(Loader<ArrayList<Store>> loader, ArrayList<Store> stores) {
         this.stores = stores;
-        updateStoreRecyclerFragment(this.stores);
+        startStoreRecyclerFragment(this.stores);
         isStoresLoaded = true;
     }
 
@@ -58,16 +66,20 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     }
 
-    private void updateStoreRecyclerFragment(ArrayList<Store> stores){
+    private void startStoreRecyclerFragment(ArrayList<Store> stores){
+        sendMailMenuButton.setVisible(false);
+        currentFragment = StoreRecyclerFragment.newInstance(stores);
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.store_container, StoreRecyclerFragment.newInstance(stores))
+                .replace(R.id.store_container, currentFragment)
                 .addToBackStack(null)
                 .commit();
     }
 
-    private void moveToCustomEamilFragment(){
+    public void startEmailFragment(String email){
+        sendMailMenuButton.setVisible(true);
+        currentFragment = EmailFragment.newInstance(email);
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.store_container, CustomEmailFragment.newInstance())
+                .replace(R.id.store_container, currentFragment)
                 .addToBackStack(null)
                 .commit();
     }
@@ -97,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                moveToCustomEamilFragment();
+                startEmailFragment(null);
             }
         });
         AlertDialog dialog = builder.create();
@@ -107,5 +119,39 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public void callWebsiteDialog() {
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main, menu);
+        this.menu = menu;
+        sendMailMenuButton = menu.findItem(R.id.send_mail_button);
+        if(currentFragment instanceof EmailFragment){
+            sendMailMenuButton.setVisible(true);
+        }else {
+            sendMailMenuButton.setVisible(false);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.send_mail_button:
+                ((EmailFragment)currentFragment).trySendEmail();
+                break;
+            case R.id.refresh_button:
+                startStoreRecyclerFragment(stores);
+                break;
+            default:
+                break;
+        }
+        return true;
+    }
+
+    @Override
+    public void refresh() {
+        startStoreRecyclerFragment(stores);
     }
 }

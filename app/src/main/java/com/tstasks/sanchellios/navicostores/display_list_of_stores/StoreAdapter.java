@@ -25,11 +25,6 @@ public class StoreAdapter extends RecyclerView.Adapter<StoreAdapter.ViewHolder> 
     private PhoneCallIntentProvider phoneCallIntentProvider;
     private WebSiteIntentProvider webSiteIntentProvider;
 
-    public interface StoreInfoAvailabilityListener {
-        void callEmailDialog();
-        void callWebsiteDialog();
-    }
-
     public StoreAdapter(ArrayList<Store> stores, Context context) {
         this.context = context;
         this.stores = stores;
@@ -85,7 +80,7 @@ public class StoreAdapter extends RecyclerView.Adapter<StoreAdapter.ViewHolder> 
             @Override
             public void onClick(View view) {
                 if(currentStore.getEmail() != null){
-                    //TODO: get to the screen of email
+                    availabilityListener.startEmailFragment(currentStore.getEmail());
                 }else {
                     Log.d("Store e-mail", "null");
                     availabilityListener.callEmailDialog();
