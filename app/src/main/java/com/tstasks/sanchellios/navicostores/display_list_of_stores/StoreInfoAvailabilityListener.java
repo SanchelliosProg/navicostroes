@@ -6,5 +6,4 @@ package com.tstasks.sanchellios.navicostores.display_list_of_stores;
 public interface StoreInfoAvailabilityListener {
     void callEmailDialog();
     void startEmailFragment(String email);
-    void callWebsiteDialog();
 }

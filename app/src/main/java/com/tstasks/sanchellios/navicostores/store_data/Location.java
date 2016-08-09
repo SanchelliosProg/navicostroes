@@ -2,23 +2,27 @@ package com.tstasks.sanchellios.navicostores.store_data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 /**
  * Created by alex on 28.07.16.
  */
 public class Location implements Parcelable{
-    private String latitude;
-    private String longitude;
+    private final int DIVIDER = 1000000;
+    private double latitude;
+    private double longitude;
 
-    public Location(String latitude, String longtitude){
-        this.setLatitude(latitude);
-        this.setLongitude(longtitude);
+    public Location(double latitude, double longitude){
+        this.latitude = latitude/DIVIDER;
+        this.longitude = longitude/DIVIDER;
+
     }
 
     protected Location(Parcel in) {
-        latitude = in.readString();
-        longitude = in.readString();
+        latitude = in.readDouble();
+        longitude = in.readDouble();
     }
+
 
     public static final Creator<Location> CREATOR = new Creator<Location>() {
         @Override
@@ -32,19 +36,19 @@ public class Location implements Parcelable{
         }
     };
 
-    public String getLatitude() {
-        return latitude;
+    public double getLatitude() {
+        return latitude/DIVIDER;
     }
 
-    public void setLatitude(String latitude) {
+    public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
 
-    public String getLongitude() {
-        return longitude;
+    public double getLongitude() {
+        return longitude/DIVIDER;
     }
 
-    public void setLongitude(String longitude) {
+    public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
 
@@ -55,7 +59,7 @@ public class Location implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(latitude);
-        parcel.writeString(longitude);
+        parcel.writeDouble(latitude);
+        parcel.writeDouble(longitude);
     }
 }

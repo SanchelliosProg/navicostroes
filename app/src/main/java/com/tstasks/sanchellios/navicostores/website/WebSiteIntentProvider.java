@@ -16,7 +16,7 @@ public class WebSiteIntentProvider {
     public Intent getWebSiteIntent(Store store){
         Intent intent = new Intent(Intent.ACTION_VIEW);
         if(store.getWebsite() != null){
-            intent.setData(Uri.parse(store.getWebsite()));
+            intent.setData(Uri.parse(store.getWebsite().toString()));
         }else {
             intent.setData(Uri.parse(getGoogleSearchUrl(store.getName())));
         }

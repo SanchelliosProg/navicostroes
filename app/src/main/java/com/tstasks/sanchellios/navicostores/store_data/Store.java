@@ -29,11 +29,23 @@ public class Store implements Parcelable{
         this.setLocation(location);
     }
 
+    public Store(Store store, Location location, ArrayList<InstrumentProfile> instruments){
+        this.name = store.getName();
+        this.address = store.getAddress();
+        this.phone = store.getPhone();
+        this.website = store.getWebsite();
+        this.email = store.getEmail();
+        this.location = location;
+        this.instruments = instruments;
+    }
+
     protected Store(Parcel in) {
         id = in.readInt();
         name = in.readString();
         address = in.readString();
         phone = in.readString();
+        website = in.readString();
+        email = in.readString();
         location = in.readParcelable(Location.class.getClassLoader());
         instruments = in.createTypedArrayList(InstrumentProfile.CREATOR);
     }
@@ -101,22 +113,6 @@ public class Store implements Parcelable{
         this.location = location;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeInt(id);
-        parcel.writeString(name);
-        parcel.writeString(address);
-        parcel.writeString(phone);
-        parcel.writeString(website);
-        parcel.writeString(email);
-        parcel.writeParcelable(location, i);
-        parcel.writeTypedList(instruments);
-    }
 
     public String getWebsite() {
         return website;
@@ -132,5 +128,26 @@ public class Store implements Parcelable{
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public ArrayList<InstrumentProfile> getInstruments(){
+        return this.instruments;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(id);
+        parcel.writeString(name);
+        parcel.writeString(address);
+        parcel.writeString(phone);
+        parcel.writeString(website);
+        parcel.writeString(email);
+        parcel.writeParcelable(location, i);
+        parcel.writeTypedList(instruments);
     }
 }

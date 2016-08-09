@@ -26,7 +26,6 @@ public class MainActivity extends AppCompatActivity
     private final String STORES_LOADED_STATE = "STORES_LOADED_STATE";
     private final String STORES_LIST = "STORES_LIST";
     private Fragment currentFragment;
-    private Menu menu;
     private MenuItem sendMailMenuButton;
 
     private boolean isStoresLoaded = false;
@@ -117,15 +116,9 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void callWebsiteDialog() {
-
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main, menu);
-        this.menu = menu;
         sendMailMenuButton = menu.findItem(R.id.send_mail_button);
         if(currentFragment instanceof EmailFragment){
             sendMailMenuButton.setVisible(true);
