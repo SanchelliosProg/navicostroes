@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setTitle(R.string.list_of_stores_title);
         if(savedInstanceState != null){
             isStoresLoaded = savedInstanceState.getBoolean(STORES_LOADED_STATE);
             stores = savedInstanceState.getParcelableArrayList(STORES_LIST);

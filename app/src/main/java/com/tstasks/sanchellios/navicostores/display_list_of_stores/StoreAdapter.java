@@ -82,14 +82,14 @@ public class StoreAdapter extends RecyclerView.Adapter<StoreAdapter.ViewHolder> 
         holder.binding.phoneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                context.startActivity(phoneCallIntentProvider.getPhoneCallIntent(currentStore.getPhone()));
+                context.startActivity(PhoneCallIntentProvider.getPhoneCallIntent(currentStore.getPhone()));
             }
         });
 
         holder.binding.webButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                context.startActivity(webSiteIntentProvider.getWebSiteIntent(currentStore));
+                context.startActivity(WebSiteIntentProvider.getWebSiteIntent(currentStore));
             }
         });
 

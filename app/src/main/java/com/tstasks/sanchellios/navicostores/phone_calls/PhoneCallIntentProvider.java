@@ -9,13 +9,9 @@ import android.util.Log;
  * Created by alex on 06.08.16.
  */
 public class PhoneCallIntentProvider {
-    private PhoneFormatter formatter;
+    private static PhoneFormatter formatter = new PhoneFormatter();
 
-    public PhoneCallIntentProvider(){
-        formatter = new PhoneFormatter();
-    }
-
-    public Intent getPhoneCallIntent(String phoneNumber) {
+    public static Intent getPhoneCallIntent(String phoneNumber) {
         String formattedPhoneNumber = formatter.getReformattedPhone(phoneNumber);
         Intent phoneIntent = new Intent(Intent.ACTION_CALL);
         phoneIntent.setData(Uri.parse("tel:" + formattedPhoneNumber));

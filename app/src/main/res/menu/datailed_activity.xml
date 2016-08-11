@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/phone_call_details_menu_button"
+        android:icon="@drawable/ic_phone_white_24dp"
+        app:showAsAction="ifRoom"
+        android:title="@string/phone_call"/>
+    <item
+        android:id="@+id/web_site_details_menu_button"
+        android:icon="@drawable/ic_web_white_24dp"
+        app:showAsAction="ifRoom"
+        android:title="@string/visit_web_site"/>
+    <item
+        android:id="@+id/send_email_details_menu_button"
+        android:icon="@drawable/ic_email_white_24dp"
+        app:showAsAction="ifRoom"
+        android:title="@string/send_email"/>
+</menu>

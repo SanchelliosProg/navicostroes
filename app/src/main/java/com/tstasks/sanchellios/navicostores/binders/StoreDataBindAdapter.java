@@ -7,6 +7,7 @@ import com.tstasks.sanchellios.navicostores.store_data.Store;
  */
 public class StoreDataBindAdapter {
     public static StoreBinder toStoreBinder(Store store){
-        return new StoreBinder(store.getName(), store.getAddress(), store.getPhone());
+        return new StoreBinder(store.getName(), store.getAddress(), store.getPhone(),
+                store.getWebsite(), store.getEmail(), store.getNumberOfInstruments());
     }
 }

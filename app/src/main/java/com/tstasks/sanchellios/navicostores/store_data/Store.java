@@ -72,6 +72,14 @@ public class Store implements Parcelable{
         }
     }
 
+    public int getNumberOfInstruments(){
+        int sum = 0;
+        for(InstrumentProfile ip : instruments){
+            sum += ip.getQuantity();
+        }
+        Log.d("Total quantity", String.valueOf(sum));
+        return sum;
+    }
 
     public int getId() {
         return id;

@@ -36,6 +36,9 @@
         </activity>
         <activity android:name=".DetailsActivity"
             android:parentActivityName=".display_list_of_stores.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".display_list_of_stores.MainActivity" />
         </activity>
     </application>
 
