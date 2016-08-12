@@ -27,14 +27,10 @@ public class StoreAdapter extends RecyclerView.Adapter<StoreAdapter.ViewHolder> 
     private ArrayList<Store> stores = new ArrayList<>();
     private Context context;
     private StoreInfoAvailabilityListener availabilityListener;
-    private PhoneCallIntentProvider phoneCallIntentProvider;
-    private WebSiteIntentProvider webSiteIntentProvider;
 
     public StoreAdapter(ArrayList<Store> stores, Context context) {
         this.context = context;
         this.stores = stores;
-        phoneCallIntentProvider = new PhoneCallIntentProvider();
-        webSiteIntentProvider = new WebSiteIntentProvider();
         this.availabilityListener = (StoreInfoAvailabilityListener)context;
     }
 
@@ -49,7 +45,7 @@ public class StoreAdapter extends RecyclerView.Adapter<StoreAdapter.ViewHolder> 
     public void onBindViewHolder(ViewHolder holder, int position) {
         final Store currentStore = this.stores.get(position);
         CardView cardView = holder.binding.storeCard;
-        holder.binding.setStore(StoreDataBindAdapter.toStoreBinder(currentStore));
+        holder.binding.setStore(new StoreDataBindAdapter().toStoreBinder(context, currentStore));
         cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

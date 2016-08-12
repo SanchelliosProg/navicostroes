@@ -9,8 +9,12 @@
     <string name="enter_email">Введите e-mail магазина</string>
     <string name="yes">да</string>
     <string name="no">нет</string>
+    <string name="no_data">Нет информации</string>
 
+    <string name="address">Адрес</string>
+    <string name="phone_number">Телефонный номер</string>
     <string name="email_label">Email</string>
+    <string name="web_site">Веб-сайт</string>
     <string name="email_theme_label">Тема</string>
     <string name="email_message_label">Сообщение</string>
 
@@ -23,6 +27,7 @@
         <item quantity="two">инструмента</item>
         <item quantity="few">инструмента</item>
         <item quantity="many">инструментов</item>
+        <item quantity="other">инструментов</item>
     </plurals>
 
     <string name="test_string">Первый и основной принцип хакерского движения, выдвинутый автором, — этика хакеров. По словам Леви, идеи движения можно сформулировать следующим образом:

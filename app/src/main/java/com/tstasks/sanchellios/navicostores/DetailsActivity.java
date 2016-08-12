@@ -52,15 +52,18 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_details);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_details);
-        initStore();
+        if(savedInstanceState ==null){
+            initStore();
+        }else {
+            currentStore = savedInstanceState.getParcelable(STORE);
+        }
         setupActionBar();
         initStoreLatLng(currentStore.getLocation());
         createMapFragment();
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
 
-        storeBinder = StoreDataBindAdapter.toStoreBinder(currentStore);
+        storeBinder = new StoreDataBindAdapter().toStoreBinder(getApplicationContext(), currentStore);
         binding.setStore(storeBinder);
     }
 
@@ -165,4 +168,9 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
         startActivity(SendEmailIntentProvider.getIntent(new String[]{currentStore.getEmail()}));
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(STORE, currentStore);
+    }
 }
