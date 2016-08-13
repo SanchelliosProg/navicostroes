@@ -3,7 +3,6 @@ package com.tstasks.sanchellios.navicostores.display_list_of_stores;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -11,7 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.tstasks.sanchellios.navicostores.DetailsActivity;
+import com.tstasks.sanchellios.navicostores.store_display.DetailsActivity;
 import com.tstasks.sanchellios.navicostores.website.WebSiteIntentProvider;
 import com.tstasks.sanchellios.navicostores.phone_calls.PhoneCallIntentProvider;
 import com.tstasks.sanchellios.navicostores.store_data.Store;

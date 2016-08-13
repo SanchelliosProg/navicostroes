@@ -3,6 +3,7 @@ package com.tstasks.sanchellios.navicostores.display_list_of_stores;
 import android.app.LoaderManager;
 import android.content.DialogInterface;
 import android.content.Loader;
+import android.content.res.Configuration;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +12,15 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.tstasks.sanchellios.navicostores.maps.MapUtils;
 import com.tstasks.sanchellios.navicostores.email_sending.EmailFragment;
 import com.tstasks.sanchellios.navicostores.R;
 import com.tstasks.sanchellios.navicostores.networking.StoreLoader;
@@ -21,12 +31,15 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity
         implements LoaderManager.LoaderCallbacks<ArrayList<Store>>,
         StoreInfoAvailabilityListener,
-        Refreshable {
+        Refreshable, OnMapReadyCallback {
 
     private final String STORES_LOADED_STATE = "STORES_LOADED_STATE";
     private final String STORES_LIST = "STORES_LIST";
     private Fragment currentFragment;
     private MenuItem sendMailMenuButton;
+    private final LatLng START_POSITION = new LatLng(51.675459, 39.208926);
+    private final int ZOOM = 10;
+    private GoogleMap map;
 
     private boolean isStoresLoaded = false;
     public final int LOAD_STORES = 0;
@@ -38,12 +51,17 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setTitle(R.string.list_of_stores_title);
+        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
+            createMapFragment();
+        }
+
         if(savedInstanceState != null){
             isStoresLoaded = savedInstanceState.getBoolean(STORES_LOADED_STATE);
             stores = savedInstanceState.getParcelableArrayList(STORES_LIST);
         }else {
             stores = new ArrayList<>();
         }
+
         if(!isStoresLoaded){
             getLoaderManager().initLoader(LOAD_STORES, null, this).forceLoad();
         }
@@ -59,6 +77,10 @@ public class MainActivity extends AppCompatActivity
         this.stores = stores;
         startStoreRecyclerFragment(this.stores);
         isStoresLoaded = true;
+        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
+            populateMap();
+            updateMapCenter();
+        }
     }
 
     @Override
@@ -147,5 +169,35 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void refresh() {
         startStoreRecyclerFragment(stores);
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        map = googleMap;
+        CameraPosition position = CameraPosition.builder().target(START_POSITION).zoom(ZOOM).build();
+        map.moveCamera(CameraUpdateFactory.newCameraPosition(position));
+        //map.addMarker(new MarkerOptions().position(VORONEZH).title(currentStore.getName()));
+        UiSettings settings = map.getUiSettings();
+        settings.setZoomControlsEnabled(true);
+    }
+
+    private void createMapFragment() {
+        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.main_activity_map);
+        mapFragment.getMapAsync(this);
+    }
+
+    private void populateMap(){
+        for(Store store : stores){
+            map.addMarker(new MarkerOptions().position(store.getLatLng()).title(store.getName()));
+        }
+    }
+
+    private void updateMapCenter(){
+        ArrayList<LatLng> latLngs = new ArrayList<>();
+        for (Store store : stores){
+            latLngs.add(store.getLatLng());
+        }
+        CameraPosition position = CameraPosition.builder().target(MapUtils.getCenterLatLng(latLngs)).zoom(ZOOM).build();
+        map.moveCamera(CameraUpdateFactory.newCameraPosition(position));
     }
 }

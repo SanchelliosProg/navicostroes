@@ -4,14 +4,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimaryDark">
 
-    <fragment
-        android:id="@+id/main_activity_map"
-        android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:name="com.google.android.gms.maps.MapFragment"/>
-
     <FrameLayout
-        android:layout_below="@+id/main_activity_map"
         android:id="@+id/store_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>

@@ -4,6 +4,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.ArrayList;
 
 /**
@@ -157,5 +159,9 @@ public class Store implements Parcelable{
         parcel.writeString(email);
         parcel.writeParcelable(location, i);
         parcel.writeTypedList(instruments);
+    }
+
+    public LatLng getLatLng(){
+        return new LatLng(location.getLatitude(), location.getLongitude());
     }
 }

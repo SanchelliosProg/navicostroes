@@ -1,13 +1,11 @@
-package com.tstasks.sanchellios.navicostores;
+package com.tstasks.sanchellios.navicostores.store_display;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,10 +22,10 @@ import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.tstasks.sanchellios.navicostores.R;
 import com.tstasks.sanchellios.navicostores.binders.StoreBinder;
 import com.tstasks.sanchellios.navicostores.binders.StoreDataBindAdapter;
 import com.tstasks.sanchellios.navicostores.databinding.ActivityDetailsBinding;
-import com.tstasks.sanchellios.navicostores.display_list_of_stores.MainActivity;
 import com.tstasks.sanchellios.navicostores.email_sending.SendEmailIntentProvider;
 import com.tstasks.sanchellios.navicostores.phone_calls.PhoneCallIntentProvider;
 import com.tstasks.sanchellios.navicostores.store_data.InstrumentProfile;
@@ -45,7 +43,6 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
     private Store currentStore;
     private StoreBinder storeBinder;
     private LatLng storeLatLng;
-    private GoogleMap map;
     private GoogleApiClient client;
     ActivityDetailsBinding binding;
 
@@ -68,8 +65,7 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
     }
 
     @Override
-    public void onMapReady(GoogleMap googleMap) {
-        map = googleMap;
+    public void onMapReady(GoogleMap map) {
         CameraPosition position = CameraPosition.builder().target(storeLatLng).zoom(zoomLevel).build();
         map.moveCamera(CameraUpdateFactory.newCameraPosition(position));
         map.addMarker(new MarkerOptions().position(storeLatLng).title(currentStore.getName()));
