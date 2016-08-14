@@ -14,7 +14,7 @@ import com.tstasks.sanchellios.navicostores.display_store_details.DetailsActivit
 import com.tstasks.sanchellios.navicostores.website.WebSiteIntentProvider;
 import com.tstasks.sanchellios.navicostores.phone_calls.PhoneCallIntentProvider;
 import com.tstasks.sanchellios.navicostores.store_data.Store;
-import com.tstasks.sanchellios.navicostores.binders.StoreDataBindAdapter;
+import com.tstasks.sanchellios.navicostores.data_binders.StoreDataBindAdapter;
 import com.tstasks.sanchellios.navicostores.databinding.StoreCardViewBinding;
 
 import java.util.ArrayList;

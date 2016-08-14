@@ -9,8 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.tstasks.sanchellios.navicostores.R;
-import com.tstasks.sanchellios.navicostores.binders.StoreBinder;
-import com.tstasks.sanchellios.navicostores.binders.StoreDataBindAdapter;
+import com.tstasks.sanchellios.navicostores.data_binders.StoreBinder;
+import com.tstasks.sanchellios.navicostores.data_binders.StoreDataBindAdapter;
 import com.tstasks.sanchellios.navicostores.databinding.FragmentStoreContactsBinding;
 import com.tstasks.sanchellios.navicostores.store_data.Store;
 

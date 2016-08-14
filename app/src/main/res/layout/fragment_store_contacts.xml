@@ -3,7 +3,7 @@
     <data>
         <variable
             name="store"
-            type="com.tstasks.sanchellios.navicostores.binders.StoreBinder"/>
+            type="com.tstasks.sanchellios.navicostores.data_binders.StoreBinder"/>
     </data>
 
     <LinearLayout

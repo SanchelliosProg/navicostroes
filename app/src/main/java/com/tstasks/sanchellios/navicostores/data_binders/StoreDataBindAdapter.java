@@ -1,4 +1,4 @@
-package com.tstasks.sanchellios.navicostores.binders;
+package com.tstasks.sanchellios.navicostores.data_binders;
 
 import android.content.Context;
 
