@@ -19,7 +19,7 @@
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
-        tools:context=".store_display.DetailsActivity">
+        tools:context=".display_store_details.DetailsActivity">
 
         <LinearLayout
             android:layout_width="0dp"

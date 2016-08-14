@@ -3,6 +3,7 @@ package com.tstasks.sanchellios.navicostores.email_sending;
 
 
 import android.content.Context;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.tstasks.sanchellios.navicostores.R;
+import com.tstasks.sanchellios.navicostores.databinding.FragmentEmailBinding;
 import com.tstasks.sanchellios.navicostores.display_list_of_stores.Refreshable;
 
 
@@ -21,7 +23,7 @@ import com.tstasks.sanchellios.navicostores.display_list_of_stores.Refreshable;
 public class EmailFragment extends Fragment {
     private static final String EMAIL_TAG = "EMAIL_TAG";
     private EditText emailEditText;
-    //private FragmentEmailBinding binding;
+    private FragmentEmailBinding binding;
     private String emailAddress;
     private Refreshable refreshable;
     private FloatingActionButton fab;
@@ -51,9 +53,9 @@ public class EmailFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        //binding = DataBindingUtil.inflate(inflater, R.layout.fragment_email, container, false);
-        View view = inflater.inflate(R.layout.fragment_email, container, false);
-        emailEditText = (EditText)view.findViewById(R.id.email_edit_text);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_email, container, false);
+        View view = binding.getRoot();
+        emailEditText = binding.emailEditText;
         if(getArguments()!=null){
             emailAddress = getArguments().getString(EMAIL_TAG);
             emailEditText.setText(emailAddress);

@@ -21,7 +21,7 @@
     <string name="in_the_store">В магазине</string>
 
     <string name="instruments">инструментов</string>
-    
+
     <plurals name="instrumentsAvailable">
         <item quantity="one">инструмент</item>
         <item quantity="two">инструмента</item>

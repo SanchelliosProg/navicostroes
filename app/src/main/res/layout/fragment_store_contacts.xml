@@ -1,0 +1,92 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="store"
+            type="com.tstasks.sanchellios.navicostores.binders.StoreBinder"/>
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context="com.tstasks.sanchellios.navicostores.display_store_details.StoreContactsFragment">
+
+        <TextView
+            android:id="@+id/detailed_address_label"
+            style="@style/TextLabel.SmallLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/address"/>
+
+        <TextView
+            android:id="@+id/detailed_address_text_view"
+            style="@style/InfoText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@{store.address}"
+            tools:text="Санкт-Петербург, Северо-Западный регион, Невский Проспект 100"/>
+
+        <TextView
+            android:id="@+id/detailed_phone_label"
+            style="@style/TextLabel.SmallLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="@string/phone_number"/>
+
+        <TextView
+            android:id="@+id/detailed_phone_text_view"
+            style="@style/InfoText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@{store.phone}"
+            tools:text="+7(981)802-34-87"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp">
+
+            <TextView
+                android:id="@+id/detailed_web_site_label"
+                style="@style/TextLabel.SmallLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/web_site"/>
+
+            <TextView
+                style="@style/InfoText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_toEndOf="@+id/detailed_web_site_label"
+                android:layout_toRightOf="@+id/detailed_web_site_label"
+                android:text="@{store.website}"
+                tools:text="www.google.com/yes/google"/>
+
+            <TextView
+                android:id="@+id/detailed_email_label"
+                style="@style/TextLabel.SmallLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/detailed_web_site_label"
+                android:text="@string/email_label"/>
+
+            <TextView
+                android:id="@+id/detailed_email_text_view"
+                style="@style/InfoText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/detailed_web_site_label"
+                android:layout_toEndOf="@+id/detailed_email_label"
+                android:layout_toRightOf="@+id/detailed_email_label"
+                android:text="@{store.email}"
+                tools:text="inbox@gmail.com"/>
+        </RelativeLayout>
+    </LinearLayout>
+
+</layout>
+
+

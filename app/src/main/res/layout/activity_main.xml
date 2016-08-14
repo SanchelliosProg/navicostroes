@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorPrimaryDark">
+    android:layout_height="match_parent">
 
     <fragment
         android:id="@+id/main_activity_map"
@@ -10,8 +9,14 @@
         android:layout_height="150dp"
         android:name="com.google.android.gms.maps.MapFragment"/>
 
-    <FrameLayout
+    <View
+        android:id="@+id/divider_line"
         android:layout_below="@+id/main_activity_map"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"/>
+
+    <FrameLayout
+        android:layout_below="@+id/divider_line"
         android:id="@+id/store_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>

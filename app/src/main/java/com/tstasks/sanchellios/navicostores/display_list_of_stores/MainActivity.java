@@ -20,6 +20,7 @@ import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.tstasks.sanchellios.navicostores.maps.MapStateRegister;
 import com.tstasks.sanchellios.navicostores.maps.MapUtils;
 import com.tstasks.sanchellios.navicostores.email_sending.EmailFragment;
 import com.tstasks.sanchellios.navicostores.R;
@@ -35,11 +36,14 @@ public class MainActivity extends AppCompatActivity
 
     private final String STORES_LOADED_STATE = "STORES_LOADED_STATE";
     private final String STORES_LIST = "STORES_LIST";
+    private final String MAP = "MAP";
     private Fragment currentFragment;
     private MenuItem sendMailMenuButton;
     private final LatLng START_POSITION = new LatLng(51.675459, 39.208926);
     private final int ZOOM = 10;
     private GoogleMap map;
+    private boolean isMapLoaded;
+    private MapStateRegister mapStateRegister;
 
     private boolean isStoresLoaded = false;
     public final int LOAD_STORES = 0;
@@ -50,6 +54,7 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mapStateRegister = new MapStateRegister();
         setTitle(R.string.list_of_stores_title);
         if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
             createMapFragment();
@@ -71,6 +76,7 @@ public class MainActivity extends AppCompatActivity
     public Loader<ArrayList<Store>> onCreateLoader(int i, Bundle bundle) {
         return createStoreLoader();
     }
+
 
     @Override
     public void onLoadFinished(Loader<ArrayList<Store>> loader, ArrayList<Store> stores) {
@@ -173,12 +179,18 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        isMapLoaded = true;
         map = googleMap;
         CameraPosition position = CameraPosition.builder().target(START_POSITION).zoom(ZOOM).build();
         map.moveCamera(CameraUpdateFactory.newCameraPosition(position));
-        //map.addMarker(new MarkerOptions().position(VORONEZH).title(currentStore.getName()));
         UiSettings settings = map.getUiSettings();
         settings.setZoomControlsEnabled(true);
+
+        if(!mapStateRegister.isPopulated())
+            populateMap();
+
+        if(!mapStateRegister.isNewCenterSet())
+            updateMapCenter();
     }
 
     private void createMapFragment() {
@@ -190,6 +202,7 @@ public class MainActivity extends AppCompatActivity
         for(Store store : stores){
             map.addMarker(new MarkerOptions().position(store.getLatLng()).title(store.getName()));
         }
+        mapStateRegister.setPopulated(true);
     }
 
     private void updateMapCenter(){
@@ -199,5 +212,6 @@ public class MainActivity extends AppCompatActivity
         }
         CameraPosition position = CameraPosition.builder().target(MapUtils.getCenterLatLng(latLngs)).zoom(ZOOM).build();
         map.moveCamera(CameraUpdateFactory.newCameraPosition(position));
+        mapStateRegister.setNewCenterSet(true);
     }
 }

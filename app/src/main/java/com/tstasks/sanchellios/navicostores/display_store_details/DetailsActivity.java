@@ -1,8 +1,10 @@
-package com.tstasks.sanchellios.navicostores.store_display;
+package com.tstasks.sanchellios.navicostores.display_store_details;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -41,27 +43,34 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
     public static String LOCATION = "LOCATION";
     public static String INSTRUMENTS = "INSTRUMENTS";
     private Store currentStore;
-    private StoreBinder storeBinder;
     private LatLng storeLatLng;
     private GoogleApiClient client;
+    private Fragment currentFragment;
     ActivityDetailsBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         binding = DataBindingUtil.setContentView(this, R.layout.activity_details);
-        if(savedInstanceState ==null){
+
+        if(savedInstanceState == null){
             initStore();
         }else {
             currentStore = savedInstanceState.getParcelable(STORE);
         }
+
         setupActionBar();
         initStoreLatLng(currentStore.getLocation());
         createMapFragment();
+
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
 
-        storeBinder = new StoreDataBindAdapter().toStoreBinder(getApplicationContext(), currentStore);
+        StoreBinder storeBinder = new StoreDataBindAdapter().toStoreBinder(getApplicationContext(), currentStore);
         binding.setStore(storeBinder);
+
+        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
+            startStoreContactsFragment();
     }
 
     @Override
@@ -152,6 +161,15 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
         return (super.onOptionsItemSelected(item));
     }
 
+    private void startStoreContactsFragment(){
+        currentFragment = StoreContactsFragment.newInstance(currentStore);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.store_details_container, currentFragment)
+                .addToBackStack(null)
+                .commit();
+    }
+
+    //TODO: Create new class for following three methods
     private void phoneCall(){
         startActivity(PhoneCallIntentProvider.getPhoneCallIntent(currentStore.getPhone()));
     }

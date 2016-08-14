@@ -34,7 +34,7 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".store_display.DetailsActivity"
+        <activity android:name=".display_store_details.DetailsActivity"
             android:parentActivityName=".display_list_of_stores.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

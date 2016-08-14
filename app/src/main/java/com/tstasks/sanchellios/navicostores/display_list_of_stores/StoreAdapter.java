@@ -10,7 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.tstasks.sanchellios.navicostores.store_display.DetailsActivity;
+import com.tstasks.sanchellios.navicostores.display_store_details.DetailsActivity;
 import com.tstasks.sanchellios.navicostores.website.WebSiteIntentProvider;
 import com.tstasks.sanchellios.navicostores.phone_calls.PhoneCallIntentProvider;
 import com.tstasks.sanchellios.navicostores.store_data.Store;
