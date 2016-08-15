@@ -10,28 +10,31 @@
             type="com.tstasks.sanchellios.navicostores.data_binders.StoreBinder"/>
     </data>
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
-        android:paddingBottom="@dimen/activity_vertical_margin"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin"
         tools:context=".display_store_details.DetailsActivity"
         android:background="@color/background">
 
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
             android:orientation="vertical"
-            android:scrollbars="vertical">
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent">
+
+            <fragment
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/map"
+                android:name="com.google.android.gms.maps.MapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="170dp"/>
 
             <TextView
                 android:id="@+id/store_name_txt_view_detailed"
-                style="@style/TextLabel.Land"
+                style="@style/TextLabel"
+                android:background="@color/colorPrimary"
+                android:textColor="@color/white"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@{store.name}"
@@ -46,81 +49,31 @@
                 android:layout_marginTop="16dp"
                 android:background="@color/colorAccent"
                 android:text="@{@string/in_the_store + ' ' + store.numberOfInstruments + ' ' + @plurals/instrumentsAvailable(store.numberOfInstruments)}"
-                android:textColor="@color/white"
-                tools:text="В магазине 100 инструментов"/>
-
-            <TextView
-                android:id="@+id/detailed_address_label"
-                style="@style/TextLabel.SmallLabel.Land"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/address"/>
-
-            <TextView
-                android:id="@+id/detailed_address_text_view"
-                style="@style/InfoText.Land"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@{store.address}"
-                tools:text="Санкт-Петербург, Северо-Западный регион, Невский Проспект 100"/>
-
-            <TextView
-                android:id="@+id/detailed_phone_label"
-                style="@style/TextLabel.SmallLabel.Land"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="@string/phone_number"/>
-
-            <TextView
-                android:id="@+id/detailed_phone_text_view"
-                style="@style/InfoText.Land"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@{store.phone}"
-                tools:text="+7(981)802-34-87"/>
-
+                android:textColor="@color/white"/>
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:orientation="vertical"
             android:layout_weight="1"
-            android:orientation="vertical">
+            android:layout_width="0dp"
+            android:layout_height="match_parent">
 
-            <fragment
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/map"
-                android:name="com.google.android.gms.maps.MapFragment"
+            <FrameLayout
+                android:id="@+id/store_details_container"
+                android:padding="8dp"
                 android:layout_width="match_parent"
-                android:layout_height="150dp"/>
-            <TextView
-                android:id="@+id/detailed_web_site_label"
-                style="@style/TextLabel.SmallLabel.Land"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/web_site"/>
-            <TextView
-                style="@style/InfoText.Land"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@{store.website}"
-                tools:text="www.google.com/yes/google"/>
-            <TextView
-                android:id="@+id/detailed_email_label"
-                style="@style/TextLabel.SmallLabel.Land"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/email_label"/>
-            <TextView
-                android:id="@+id/detailed_email_text_view"
-                style="@style/InfoText.Land"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@{store.email}"
-                tools:text="inbox@gmail.com"/>
+                android:layout_height="match_parent"/>
+
         </LinearLayout>
-    </LinearLayout>
+
+
+
+
+
+
+
+
+
+        </LinearLayout>
 </layout>
 

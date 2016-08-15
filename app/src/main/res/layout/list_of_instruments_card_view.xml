@@ -18,35 +18,39 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="16dp">
-            <TextView
-                style="@style/TextLabel"
+            <me.grantland.widget.AutofitTextView
+                style="@style/TextLabel.SmallLabel.Land"
                 android:id="@+id/brand_and_model_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:padding="0dp"
+                android:paddingRight="4dp"
                 tools:text="Fender Jazz Bass"
-                android:text="@{instrument.brand + ' ' + instrument.model}"/>
+                android:singleLine="true"
+                android:text="@{instrument.brand + ' ' + instrument.model}"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_toLeftOf="@+id/price_text_view"
+                android:layout_toStartOf="@+id/price_text_view"/>
 
             <TextView
                 android:id="@+id/type_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="Бас-Гитара"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
                 android:text="@{instrument.type}"
                 android:layout_below="@+id/brand_and_model_text_view"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"/>
 
             <TextView
-                style="@style/TextLabel"
-                android:textColor="@color/white"
+                style="@style/TextLabel.SmallLabel"
+                android:textColor="@color/colorPrimaryDark"
                 android:id="@+id/price_text_view"
-                android:background="@drawable/store_card_buttons_shape"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                tools:text="666$"
+                tools:text="2000$"
                 android:text="@{instrument.price}"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentRight="true"

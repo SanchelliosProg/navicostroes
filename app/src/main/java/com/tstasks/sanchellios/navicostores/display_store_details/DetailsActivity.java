@@ -43,6 +43,12 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
     public static String STORE = "STORE";
     public static String LOCATION = "LOCATION";
     public static String INSTRUMENTS = "INSTRUMENTS";
+    private final String CURRENT_FRAGMENT = "CURRENT_FRAGMENT";
+
+    private int CURRENT_FRAGMENT_STATE = 0;
+    private int STORE_CONTACTS_FRAGMENT = 0;
+    private int INSTRUMENTS_LIST_FRAGMENT = 1;
+
     private Store currentStore;
     private LatLng storeLatLng;
     private GoogleApiClient client;
@@ -67,17 +73,35 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
 
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
 
-        StoreBinder storeBinder = new StoreDataBindAdapter().toStoreBinder(getApplicationContext(), currentStore);
+        final StoreBinder storeBinder = new StoreDataBindAdapter().toStoreBinder(getApplicationContext(), currentStore);
         binding.setStore(storeBinder);
 
-        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
-            startStoreContactsFragment();
+
+
+            if(savedInstanceState == null){
+                startStoreContactsFragment();
+            }else {
+                CURRENT_FRAGMENT_STATE = savedInstanceState.getInt(CURRENT_FRAGMENT);
+                if(CURRENT_FRAGMENT_STATE == STORE_CONTACTS_FRAGMENT){
+                    startStoreContactsFragment();
+                }else {
+                    startInstrumentListFragment();
+                    binding.numOfInstrumentsButton.setText(R.string.to_details);
+                }
+            }
+
+
 
         binding.numOfInstrumentsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startInstrumentRecyclerFragment();
-                binding.numOfInstrumentsButton.setText(R.string.to_details);
+                if(currentFragment instanceof StoreContactsFragment){
+                    startInstrumentListFragment();
+                    binding.numOfInstrumentsButton.setText(R.string.to_details);
+                }else {
+                    startStoreContactsFragment();
+                    binding.setStore(storeBinder);
+                }
             }
         });
     }
@@ -89,6 +113,13 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
         map.addMarker(new MarkerOptions().position(storeLatLng).title(currentStore.getName()));
         UiSettings settings = map.getUiSettings();
         settings.setZoomControlsEnabled(true);
+        checkIfButtonStringIsRight();
+    }
+
+    private void checkIfButtonStringIsRight(){
+        if(CURRENT_FRAGMENT_STATE == INSTRUMENTS_LIST_FRAGMENT){
+            binding.numOfInstrumentsButton.setText(R.string.to_details);
+        }
     }
 
     private void initStore() {
@@ -108,6 +139,7 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
     }
 
     private void startStoreContactsFragment(){
+        CURRENT_FRAGMENT_STATE = STORE_CONTACTS_FRAGMENT;
         currentFragment = StoreContactsFragment.newInstance(currentStore);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.store_details_container, currentFragment)
@@ -115,8 +147,9 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
                 .commit();
     }
 
-    private void startInstrumentRecyclerFragment(){
-        currentFragment = InstrumentRecyclerFragment.newInstance(currentStore.getInstruments());
+    private void startInstrumentListFragment(){
+        CURRENT_FRAGMENT_STATE = INSTRUMENTS_LIST_FRAGMENT;
+        currentFragment = InstrumentsListFragment.newInstance(currentStore.getInstruments());
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.store_details_container, currentFragment)
                 .addToBackStack(null)
@@ -203,5 +236,6 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable(STORE, currentStore);
+        outState.putInt(CURRENT_FRAGMENT, CURRENT_FRAGMENT_STATE);
     }
 }

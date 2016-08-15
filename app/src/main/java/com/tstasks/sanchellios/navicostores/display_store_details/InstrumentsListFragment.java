@@ -2,7 +2,6 @@ package com.tstasks.sanchellios.navicostores.display_store_details;
 
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.tstasks.sanchellios.navicostores.R;
-import com.tstasks.sanchellios.navicostores.store_data.Instrument;
 import com.tstasks.sanchellios.navicostores.store_data.InstrumentProfile;
 
 import java.util.ArrayList;
@@ -19,18 +17,18 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class InstrumentRecyclerFragment extends Fragment {
+public class InstrumentsListFragment extends Fragment {
 
     private static final String PROFILES = "PROFILES";
 
-    public InstrumentRecyclerFragment() {
+    public InstrumentsListFragment() {
         // Required empty public constructor
     }
 
-    public static InstrumentRecyclerFragment newInstance(ArrayList<InstrumentProfile> profiles){
+    public static InstrumentsListFragment newInstance(ArrayList<InstrumentProfile> profiles){
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList(PROFILES, profiles);
-        InstrumentRecyclerFragment fragment = new InstrumentRecyclerFragment();
+        InstrumentsListFragment fragment = new InstrumentsListFragment();
         fragment.setArguments(bundle);
         return fragment;
     }
