@@ -15,7 +15,6 @@ import com.tstasks.sanchellios.navicostores.R;
 import com.tstasks.sanchellios.navicostores.store_data.Store;
 
 import java.util.ArrayList;
-import java.util.jar.Manifest;
 
 
 /**
@@ -51,7 +50,7 @@ public class StoreRecyclerFragment extends Fragment {
         stores = getArguments().getParcelableArrayList(STORES_KEY);
 
 
-        StoreAdapter adapter = new StoreAdapter(stores, getContext());
+        StoreRecyclerAdapter adapter = new StoreRecyclerAdapter(stores, getContext());
         recyclerView.setAdapter(adapter);
 
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());

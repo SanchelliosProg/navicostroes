@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
@@ -71,6 +72,14 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
 
         if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
             startStoreContactsFragment();
+
+        binding.numOfInstrumentsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startInstrumentRecyclerFragment();
+                binding.numOfInstrumentsButton.setText(R.string.to_details);
+            }
+        });
     }
 
     @Override
@@ -96,6 +105,22 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
     private void createMapFragment() {
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+    }
+
+    private void startStoreContactsFragment(){
+        currentFragment = StoreContactsFragment.newInstance(currentStore);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.store_details_container, currentFragment)
+                .addToBackStack(null)
+                .commit();
+    }
+
+    private void startInstrumentRecyclerFragment(){
+        currentFragment = InstrumentRecyclerFragment.newInstance(currentStore.getInstruments());
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.store_details_container, currentFragment)
+                .addToBackStack(null)
+                .commit();
     }
 
     private void setupActionBar(){
@@ -159,14 +184,6 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
                 break;
         }
         return (super.onOptionsItemSelected(item));
-    }
-
-    private void startStoreContactsFragment(){
-        currentFragment = StoreContactsFragment.newInstance(currentStore);
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.store_details_container, currentFragment)
-                .addToBackStack(null)
-                .commit();
     }
 
     //TODO: Create new class for following three methods

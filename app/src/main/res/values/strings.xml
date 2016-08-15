@@ -22,6 +22,8 @@
 
     <string name="instruments">инструментов</string>
 
+    <string name="to_details">К детальной информации</string>
+
     <plurals name="instrumentsAvailable">
         <item quantity="one">инструмент</item>
         <item quantity="two">инструмента</item>

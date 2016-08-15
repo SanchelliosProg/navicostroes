@@ -27,13 +27,16 @@
                 android:text="@{instrument.brand + ' ' + instrument.model}"/>
 
             <TextView
-                style="@style/TextLabel.SmallLabel"
-                android:layout_below="@+id/brand_and_model_text_view"
                 android:id="@+id/type_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="Бас-Гитара"
-                android:text="@{instrument.type}"/>
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:text="@{instrument.type}"
+                android:layout_below="@+id/brand_and_model_text_view"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"/>
 
             <TextView
                 style="@style/TextLabel"

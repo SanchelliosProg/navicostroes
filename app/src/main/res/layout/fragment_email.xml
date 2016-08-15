@@ -6,7 +6,8 @@
         android:layout_height="match_parent"
         android:padding="4dp"
         tools:context=".email_sending.EmailFragment"
-        android:scrollbars="vertical">
+        android:scrollbars="vertical"
+        android:background="@color/background">
 
         <TextView
             style="@style/TextLabel"
