@@ -17,6 +17,7 @@
     <string name="web_site">Веб-сайт</string>
     <string name="email_theme_label">Тема</string>
     <string name="email_message_label">Сообщение</string>
+    <string name="item_string">шт.</string>
 
     <string name="in_the_store">В магазине</string>
 

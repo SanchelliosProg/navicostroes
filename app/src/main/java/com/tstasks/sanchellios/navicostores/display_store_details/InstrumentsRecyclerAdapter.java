@@ -16,13 +16,10 @@ import java.util.ArrayList;
 
 public class InstrumentsRecyclerAdapter extends RecyclerView.Adapter<InstrumentsRecyclerAdapter.ViewHolder> {
 
-    private ArrayList<Instrument> instruments;
+    private ArrayList<InstrumentProfile> profiles;
 
     public InstrumentsRecyclerAdapter(ArrayList<InstrumentProfile> profiles){
-        instruments = new ArrayList<>();
-        for (InstrumentProfile profile : profiles){
-            instruments.add(profile.getInstrument());
-        }
+        this.profiles = profiles;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
@@ -43,12 +40,14 @@ public class InstrumentsRecyclerAdapter extends RecyclerView.Adapter<Instruments
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Instrument instrument = instruments.get(position);
+        InstrumentProfile profile = profiles.get(position);
+        Instrument instrument = profile.getInstrument();
         holder.binding.setInstrument(new InstrumentBinder(instrument));
+        holder.binding.setProfile(profile);
     }
 
     @Override
     public int getItemCount() {
-        return instruments.size();
+        return profiles.size();
     }
 }
