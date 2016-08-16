@@ -8,6 +8,7 @@ import android.content.Loader;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -53,8 +54,7 @@ public class MainActivity extends AppCompatActivity
     private final String MAP_MODE_STATE = "MAP_MODE_STATE";
     private final String STORES_LOADED_STATE = "STORES_LOADED_STATE";
     private final String STORES_LIST = "STORES_LIST";
-    private final String USER_LATITUDE = "USER_LATITUDE";
-    private final String USER_LONGITUDE = "USER_LONGITUDE";
+    private final String USER_LOCATION = "USER_LOCATION";
 
     private final int LIST_OF_STORES_MODE = 0;
     private final int USER_LOCATION_MODE = 1;
@@ -71,6 +71,7 @@ public class MainActivity extends AppCompatActivity
     private final int ZOOM = 10;
     private GoogleMap map;
     private GoogleApiClient googleApiClient;
+    private Location userPrevLocation;
     private Location usersLastLocation;
     private MapStateRegister mapStateRegister;
 
@@ -92,8 +93,7 @@ public class MainActivity extends AppCompatActivity
             mapModeState = savedInstanceState.getInt(MAP_MODE_STATE);
             isStoresLoaded = savedInstanceState.getBoolean(STORES_LOADED_STATE);
             stores = savedInstanceState.getParcelableArrayList(STORES_LIST);
-//            usersLastLocation.setLatitude(savedInstanceState.getDouble(USER_LATITUDE));
-//            usersLastLocation.setLongitude(savedInstanceState.getDouble(USER_LONGITUDE));
+            userPrevLocation = savedInstanceState.getParcelable(USER_LOCATION);
         } else {
             stores = new ArrayList<>();
         }
@@ -265,7 +265,12 @@ public class MainActivity extends AppCompatActivity
         mapStateRegister.setNewCenterSet(false);
         requestLocationPermission();
         setMyLocation(this.map);
-        moveCamera(getUsersCoordinates(), ZOOM, this.map);
+        try{
+            moveCamera(getUsersCoordinates(usersLastLocation), ZOOM, this.map);
+        }catch (NullPointerException ex){
+            moveCamera(getUsersCoordinates(userPrevLocation), ZOOM, this.map);
+        }
+
         try{
             getLocationButton.setIcon(R.drawable.ic_location_disabled_white_24dp);
             isLocationIconFailedToChange = false;
@@ -356,8 +361,8 @@ public class MainActivity extends AppCompatActivity
         usersLastLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
     }
 
-    private LatLng getUsersCoordinates(){
-        return new LatLng(usersLastLocation.getLatitude(), usersLastLocation.getLongitude());
+    private LatLng getUsersCoordinates(Location location){
+        return new LatLng(location.getLatitude(), location.getLongitude());
     }
 
     @Override
@@ -376,7 +381,11 @@ public class MainActivity extends AppCompatActivity
         outState.putBoolean(STORES_LOADED_STATE, isStoresLoaded);
         outState.putParcelableArrayList(STORES_LIST, stores);
         outState.putInt(MAP_MODE_STATE, mapModeState);
-        outState.putDouble(USER_LATITUDE, usersLastLocation.getLatitude());
-        outState.putDouble(USER_LONGITUDE, usersLastLocation.getLongitude());
+        if(usersLastLocation == null){
+            outState.putParcelable(USER_LOCATION, userPrevLocation);
+        }else {
+            outState.putParcelable(USER_LOCATION, usersLastLocation);
+        }
+
     }
 }
