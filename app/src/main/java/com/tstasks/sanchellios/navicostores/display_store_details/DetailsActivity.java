@@ -1,7 +1,6 @@
 package com.tstasks.sanchellios.navicostores.display_store_details;
 
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.support.v4.app.Fragment;

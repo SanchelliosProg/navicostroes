@@ -1,10 +1,19 @@
 package com.tstasks.sanchellios.navicostores.display_list_of_stores;
 
+import android.Manifest;
+import android.annotation.TargetApi;
 import android.app.LoaderManager;
 import android.content.DialogInterface;
 import android.content.Loader;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.location.Location;
+import android.os.Build;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,6 +21,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -20,6 +32,7 @@ import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
 import com.tstasks.sanchellios.navicostores.maps.MapStateRegister;
 import com.tstasks.sanchellios.navicostores.maps.MapUtils;
 import com.tstasks.sanchellios.navicostores.email_sending.EmailFragment;
@@ -32,21 +45,34 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity
         implements LoaderManager.LoaderCallbacks<ArrayList<Store>>,
         StoreInfoAvailabilityListener,
-        Refreshable, OnMapReadyCallback {
+        Refreshable, OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
+    public final int STORES_LOADER_ID = 0;
+
+    private final String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
+    private final String MAP_MODE_STATE = "MAP_MODE_STATE";
     private final String STORES_LOADED_STATE = "STORES_LOADED_STATE";
     private final String STORES_LIST = "STORES_LIST";
-    private final String MAP = "MAP";
+    private final String USER_LATITUDE = "USER_LATITUDE";
+    private final String USER_LONGITUDE = "USER_LONGITUDE";
+
+    private final int LIST_OF_STORES_MODE = 0;
+    private final int USER_LOCATION_MODE = 1;
+
+    private int mapModeState = 0;
+    private boolean isLocationIconFailedToChange;
+    private boolean isStoresLoaded;
+
     private Fragment currentFragment;
     private MenuItem sendMailMenuButton;
+    private MenuItem getLocationButton;
+
     private final LatLng START_POSITION = new LatLng(51.675459, 39.208926);
     private final int ZOOM = 10;
     private GoogleMap map;
-    private boolean isMapLoaded;
+    private GoogleApiClient googleApiClient;
+    private Location usersLastLocation;
     private MapStateRegister mapStateRegister;
-
-    private boolean isStoresLoaded = false;
-    public final int LOAD_STORES = 0;
 
     private ArrayList<Store> stores;
 
@@ -54,48 +80,54 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
         mapStateRegister = new MapStateRegister();
         setTitle(R.string.list_of_stores_title);
-        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             createMapFragment();
         }
 
-        if(savedInstanceState != null){
+        if (savedInstanceState != null) {
+            mapModeState = savedInstanceState.getInt(MAP_MODE_STATE);
             isStoresLoaded = savedInstanceState.getBoolean(STORES_LOADED_STATE);
             stores = savedInstanceState.getParcelableArrayList(STORES_LIST);
-        }else {
+//            usersLastLocation.setLatitude(savedInstanceState.getDouble(USER_LATITUDE));
+//            usersLastLocation.setLongitude(savedInstanceState.getDouble(USER_LONGITUDE));
+        } else {
             stores = new ArrayList<>();
         }
 
-        if(!isStoresLoaded){
-            getLoaderManager().initLoader(LOAD_STORES, null, this).forceLoad();
+        if (!isStoresLoaded) {
+            getLoaderManager().initLoader(STORES_LOADER_ID, null, this).forceLoad();
         }
+
+        initGoogleApiClient();
     }
 
     @Override
-    public Loader<ArrayList<Store>> onCreateLoader(int i, Bundle bundle) {
-        return createStoreLoader();
+    protected void onStart() {
+        googleApiClient.connect();
+        super.onStart();
     }
 
+    @Override
+    protected void onStop() {
+        googleApiClient.disconnect();
+        super.onStop();
+    }
 
     @Override
-    public void onLoadFinished(Loader<ArrayList<Store>> loader, ArrayList<Store> stores) {
-        this.stores = stores;
-        startStoreRecyclerFragment(this.stores);
-        isStoresLoaded = true;
-        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
-            populateMap();
-            updateMapCenter();
+    public void refresh() {
+        startStoreRecyclerFragment(stores);
+    }
+
+    private void startStoreRecyclerFragment(ArrayList<Store> stores) {
+        try{
+            sendMailMenuButton.setVisible(false);
+        }catch (NullPointerException ex){
+            ex.printStackTrace();
         }
-    }
-
-    @Override
-    public void onLoaderReset(Loader<ArrayList<Store>> loader) {
-
-    }
-
-    private void startStoreRecyclerFragment(ArrayList<Store> stores){
-        sendMailMenuButton.setVisible(false);
         currentFragment = StoreRecyclerFragment.newInstance(stores);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.store_container, currentFragment)
@@ -103,24 +135,13 @@ public class MainActivity extends AppCompatActivity
                 .commit();
     }
 
-    public void startEmailFragment(String email){
+    public void startEmailFragment(String email) {
         sendMailMenuButton.setVisible(true);
         currentFragment = EmailFragment.newInstance(email);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.store_container, currentFragment)
                 .addToBackStack(null)
                 .commit();
-    }
-
-    private StoreLoader createStoreLoader(){
-        return new StoreLoader(getApplicationContext());
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putBoolean(STORES_LOADED_STATE, isStoresLoaded);
-        outState.putParcelableArrayList(STORES_LIST, stores);
     }
 
     @Override
@@ -145,13 +166,51 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    public Loader<ArrayList<Store>> onCreateLoader(int i, Bundle bundle) {
+        return createStoreLoader();
+    }
+
+
+    @Override
+    public void onLoadFinished(Loader<ArrayList<Store>> loader, ArrayList<Store> stores) {
+        this.stores = stores;
+        startStoreRecyclerFragment(this.stores);
+        isStoresLoaded = true;
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            populateMap();
+            updateMapCenter();
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<ArrayList<Store>> loader) {
+
+    }
+
+    private StoreLoader createStoreLoader() {
+        return new StoreLoader(getApplicationContext());
+    }
+
+
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main, menu);
         sendMailMenuButton = menu.findItem(R.id.send_mail_button);
-        if(currentFragment instanceof EmailFragment){
+        getLocationButton = menu.findItem(R.id.get_location_button);
+
+        if(isLocationIconFailedToChange){
+            if(mapModeState == LIST_OF_STORES_MODE){
+                getLocationButton.setIcon(R.drawable.ic_location_searching_white_24dp);
+            }else {
+                getLocationButton.setIcon(R.drawable.ic_location_disabled_white_24dp);
+            }
+        }
+
+        if (currentFragment instanceof EmailFragment) {
             sendMailMenuButton.setVisible(true);
-        }else {
+        } else {
             sendMailMenuButton.setVisible(false);
         }
         return true;
@@ -159,12 +218,19 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.send_mail_button:
-                ((EmailFragment)currentFragment).trySendEmail();
+                ((EmailFragment) currentFragment).trySendEmail();
                 break;
             case R.id.refresh_button:
                 startStoreRecyclerFragment(stores);
+                break;
+            case R.id.get_location_button:
+                if(mapModeState == LIST_OF_STORES_MODE){
+                    startUserLocationMapMode();
+                }else {
+                    startListOfStoresMapMode();
+                }
                 break;
             default:
                 break;
@@ -172,46 +238,145 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    @Override
-    public void refresh() {
-        startStoreRecyclerFragment(stores);
-    }
-
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        isMapLoaded = true;
-        map = googleMap;
-        CameraPosition position = CameraPosition.builder().target(START_POSITION).zoom(ZOOM).build();
-        map.moveCamera(CameraUpdateFactory.newCameraPosition(position));
-        UiSettings settings = map.getUiSettings();
-        settings.setZoomControlsEnabled(true);
-
-        if(!mapStateRegister.isPopulated())
-            populateMap();
-
-        if(!mapStateRegister.isNewCenterSet())
-            updateMapCenter();
-    }
-
     private void createMapFragment() {
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.main_activity_map);
         mapFragment.getMapAsync(this);
     }
 
-    private void populateMap(){
-        for(Store store : stores){
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        map = googleMap;
+        moveCamera(START_POSITION, ZOOM, map);
+        setZoomControlOnMap(map);
+        if(mapModeState == LIST_OF_STORES_MODE){
+            startListOfStoresMapMode();
+        }else {
+            startUserLocationMapMode();
+        }
+    }
+
+    private void moveCamera(LatLng coordinates, int zoom, GoogleMap map) {
+        CameraPosition position = CameraPosition.builder().target(coordinates).zoom(zoom).build();
+        map.moveCamera(CameraUpdateFactory.newCameraPosition(position));
+    }
+
+    private void startUserLocationMapMode(){
+        mapStateRegister.setPopulated(false);
+        mapStateRegister.setNewCenterSet(false);
+        requestLocationPermission();
+        setMyLocation(this.map);
+        moveCamera(getUsersCoordinates(), ZOOM, this.map);
+        try{
+            getLocationButton.setIcon(R.drawable.ic_location_disabled_white_24dp);
+            isLocationIconFailedToChange = false;
+        }catch (NullPointerException ex){
+            isLocationIconFailedToChange =true;
+        }
+        mapModeState = USER_LOCATION_MODE;
+    }
+
+    private void startListOfStoresMapMode(){
+        setListOfStoresOnMap();
+        try{
+            getLocationButton.setIcon(R.drawable.ic_location_searching_white_24dp);
+            isLocationIconFailedToChange = false;
+        }catch (NullPointerException ex){
+            isLocationIconFailedToChange = true;
+        }
+        mapModeState = LIST_OF_STORES_MODE;
+    }
+
+    private void requestLocationPermission() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(permissions, 1);
+            }
+        }
+    }
+
+    private void setZoomControlOnMap(GoogleMap map) {
+        UiSettings settings = map.getUiSettings();
+        settings.setZoomControlsEnabled(true);
+    }
+
+    private void setListOfStoresOnMap() {
+        if (!mapStateRegister.isPopulated())
+            populateMap();
+
+        if (!mapStateRegister.isNewCenterSet())
+            updateMapCenter();
+    }
+
+    @TargetApi(Build.VERSION_CODES.M)
+    private void setMyLocation(GoogleMap map) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            map.clear();
+            map.setMyLocationEnabled(true);
+        } else if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            if (!map.isMyLocationEnabled()) {
+                map.setMyLocationEnabled(true);
+            }
+        }
+    }
+
+    private void populateMap() {
+        for (Store store : stores) {
             map.addMarker(new MarkerOptions().position(store.getLatLng()).title(store.getName()));
         }
         mapStateRegister.setPopulated(true);
     }
 
-    private void updateMapCenter(){
+    private void updateMapCenter() {
         ArrayList<LatLng> latLngs = new ArrayList<>();
-        for (Store store : stores){
+        for (Store store : stores) {
             latLngs.add(store.getLatLng());
         }
         CameraPosition position = CameraPosition.builder().target(MapUtils.getCenterLatLng(latLngs)).zoom(ZOOM).build();
         map.moveCamera(CameraUpdateFactory.newCameraPosition(position));
         mapStateRegister.setNewCenterSet(true);
+    }
+
+    private void initGoogleApiClient() {
+        if (googleApiClient == null) {
+            googleApiClient = new GoogleApiClient.Builder(this)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(LocationServices.API)
+                    .build();
+        }
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestLocationPermission();
+        }
+        usersLastLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
+    }
+
+    private LatLng getUsersCoordinates(){
+        return new LatLng(usersLastLocation.getLatitude(), usersLastLocation.getLongitude());
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(STORES_LOADED_STATE, isStoresLoaded);
+        outState.putParcelableArrayList(STORES_LIST, stores);
+        outState.putInt(MAP_MODE_STATE, mapModeState);
+        outState.putDouble(USER_LATITUDE, usersLastLocation.getLatitude());
+        outState.putDouble(USER_LONGITUDE, usersLastLocation.getLongitude());
     }
 }

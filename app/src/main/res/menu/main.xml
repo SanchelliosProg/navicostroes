@@ -2,6 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:title="check_location"
+        android:id="@+id/get_location_button"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_location_searching_white_24dp"/>
+    <item
         android:id="@+id/send_mail_button"
         android:icon="@drawable/ic_email_white_48dp"
         android:title="send_mail"

@@ -2,7 +2,6 @@ package com.tstasks.sanchellios.navicostores.store_data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 
 /**
  * Created by alex on 28.07.16.
