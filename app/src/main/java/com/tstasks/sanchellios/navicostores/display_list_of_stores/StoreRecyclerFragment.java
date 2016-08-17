@@ -2,9 +2,11 @@ package com.tstasks.sanchellios.navicostores.display_list_of_stores;
 
 
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -52,9 +54,13 @@ public class StoreRecyclerFragment extends Fragment {
 
         StoreRecyclerAdapter adapter = new StoreRecyclerAdapter(stores, getContext());
         recyclerView.setAdapter(adapter);
-
-        LinearLayoutManager manager = new LinearLayoutManager(getActivity());
-        recyclerView.setLayoutManager(manager);
+        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
+            LinearLayoutManager manager = new LinearLayoutManager(getActivity());
+            recyclerView.setLayoutManager(manager);
+        }else {
+            GridLayoutManager manager = new GridLayoutManager(getActivity(), 2);
+            recyclerView.setLayoutManager(manager);
+        }
 
         return recyclerView;
     }

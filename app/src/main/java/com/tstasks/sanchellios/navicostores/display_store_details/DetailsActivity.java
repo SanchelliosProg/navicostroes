@@ -105,6 +105,17 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
         });
     }
 
+    private void setupActionBar(){
+        ActionBar ab = getSupportActionBar();
+        ab.setTitle(currentStore.getName());
+        ab.setDisplayHomeAsUpEnabled(true);
+    }
+
+    private void createMapFragment() {
+        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+    }
+
     @Override
     public void onMapReady(GoogleMap map) {
         CameraPosition position = CameraPosition.builder().target(storeLatLng).zoom(zoomLevel).build();
@@ -132,11 +143,6 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
         storeLatLng = new LatLng(location.getLatitude(), location.getLongitude());
     }
 
-    private void createMapFragment() {
-        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
-    }
-
     private void startStoreContactsFragment(){
         CURRENT_FRAGMENT_STATE = STORE_CONTACTS_FRAGMENT;
         currentFragment = StoreContactsFragment.newInstance(currentStore);
@@ -153,12 +159,6 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
                 .replace(R.id.store_details_container, currentFragment)
                 .addToBackStack(null)
                 .commit();
-    }
-
-    private void setupActionBar(){
-        ActionBar ab = getSupportActionBar();
-        ab.setTitle(currentStore.getName());
-        ab.setDisplayHomeAsUpEnabled(true);
     }
 
     @Override

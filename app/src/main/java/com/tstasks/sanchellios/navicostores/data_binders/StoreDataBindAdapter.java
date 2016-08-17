@@ -3,6 +3,7 @@ package com.tstasks.sanchellios.navicostores.data_binders;
 import android.content.Context;
 
 import com.tstasks.sanchellios.navicostores.R;
+import com.tstasks.sanchellios.navicostores.Transliterator;
 import com.tstasks.sanchellios.navicostores.store_data.Store;
 
 /**
@@ -13,19 +14,19 @@ public class StoreDataBindAdapter {
     public StoreBinder toStoreBinder(Context context, Store store){
         this.context = context;
         return new StoreBinder(
-                investigateStringNull(store.getName()),
-                investigateStringNull(store.getAddress()),
-                investigateStringNull(store.getPhone()),
-                investigateStringNull(store.getWebsite()),
-                investigateStringNull(store.getEmail()),
+                adoptString(store.getName()),
+                adoptString(store.getAddress()),
+                adoptString(store.getPhone()),
+                adoptString(store.getWebsite()),
+                adoptString(store.getEmail()),
                 store.getNumberOfInstruments());
     }
 
-    private String investigateStringNull(String string){
+    private String adoptString(String string){
         if(string == null){
             return context.getResources().getString(R.string.no_data);
         }else {
-            return string;
+            return Transliterator.getRussianString(string);
         }
     }
 
