@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.LoaderManager;
 import android.content.DialogInterface;
+import android.content.IntentSender;
 import android.content.Loader;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -18,6 +19,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -51,6 +53,7 @@ public class MainActivity extends AppCompatActivity
     public final int STORES_LOADER_ID = 0;
 
     private final String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
+
     private final String MAP_MODE_STATE = "MAP_MODE_STATE";
     private final String STORES_LOADED_STATE = "STORES_LOADED_STATE";
     private final String STORES_LIST = "STORES_LIST";
@@ -81,7 +84,6 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
         mapStateRegister = new MapStateRegister();
         setTitle(R.string.list_of_stores_title);
@@ -123,9 +125,9 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void startStoreRecyclerFragment(ArrayList<Store> stores) {
-        try{
+        try {
             sendMailMenuButton.setVisible(false);
-        }catch (NullPointerException ex){
+        } catch (NullPointerException ex) {
             ex.printStackTrace();
         }
         currentFragment = StoreRecyclerFragment.newInstance(stores);
@@ -192,7 +194,6 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -200,10 +201,10 @@ public class MainActivity extends AppCompatActivity
         sendMailMenuButton = menu.findItem(R.id.send_mail_button);
         getLocationButton = menu.findItem(R.id.get_location_button);
 
-        if(isLocationIconFailedToChange){
-            if(mapModeState == LIST_OF_STORES_MODE){
+        if (isLocationIconFailedToChange) {
+            if (mapModeState == LIST_OF_STORES_MODE) {
                 getLocationButton.setIcon(R.drawable.ic_location_searching_white_24dp);
-            }else {
+            } else {
                 getLocationButton.setIcon(R.drawable.ic_location_disabled_white_24dp);
             }
         }
@@ -226,9 +227,9 @@ public class MainActivity extends AppCompatActivity
                 startStoreRecyclerFragment(stores);
                 break;
             case R.id.get_location_button:
-                if(mapModeState == LIST_OF_STORES_MODE){
+                if (mapModeState == LIST_OF_STORES_MODE) {
                     startUserLocationMapMode();
-                }else {
+                } else {
                     startListOfStoresMapMode();
                 }
                 break;
@@ -248,9 +249,9 @@ public class MainActivity extends AppCompatActivity
         map = googleMap;
         moveCamera(START_POSITION, ZOOM, map);
         setZoomControlOnMap(map);
-        if(mapModeState == LIST_OF_STORES_MODE){
+        if (mapModeState == LIST_OF_STORES_MODE) {
             startListOfStoresMapMode();
-        }else {
+        } else {
             startUserLocationMapMode();
         }
     }
@@ -260,32 +261,32 @@ public class MainActivity extends AppCompatActivity
         map.moveCamera(CameraUpdateFactory.newCameraPosition(position));
     }
 
-    private void startUserLocationMapMode(){
+    private void startUserLocationMapMode() {
         mapStateRegister.setPopulated(false);
         mapStateRegister.setNewCenterSet(false);
         requestLocationPermission();
         setMyLocation(this.map);
-        try{
+        try {
             moveCamera(getUsersCoordinates(usersLastLocation), ZOOM, this.map);
-        }catch (NullPointerException ex){
+        } catch (NullPointerException ex) {
             moveCamera(getUsersCoordinates(userPrevLocation), ZOOM, this.map);
         }
 
-        try{
+        try {
             getLocationButton.setIcon(R.drawable.ic_location_disabled_white_24dp);
             isLocationIconFailedToChange = false;
-        }catch (NullPointerException ex){
-            isLocationIconFailedToChange =true;
+        } catch (NullPointerException ex) {
+            isLocationIconFailedToChange = true;
         }
         mapModeState = USER_LOCATION_MODE;
     }
 
-    private void startListOfStoresMapMode(){
+    private void startListOfStoresMapMode() {
         setListOfStoresOnMap();
-        try{
+        try {
             getLocationButton.setIcon(R.drawable.ic_location_searching_white_24dp);
             isLocationIconFailedToChange = false;
-        }catch (NullPointerException ex){
+        } catch (NullPointerException ex) {
             isLocationIconFailedToChange = true;
         }
         mapModeState = LIST_OF_STORES_MODE;
@@ -361,7 +362,7 @@ public class MainActivity extends AppCompatActivity
         usersLastLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
     }
 
-    private LatLng getUsersCoordinates(Location location){
+    private LatLng getUsersCoordinates(Location location) {
         return new LatLng(location.getLatitude(), location.getLongitude());
     }
 
@@ -382,8 +383,10 @@ public class MainActivity extends AppCompatActivity
         outState.putParcelableArrayList(STORES_LIST, stores);
         outState.putInt(MAP_MODE_STATE, mapModeState);
         if(usersLastLocation == null){
+            Log.d(USER_LOCATION, "was null");
             outState.putParcelable(USER_LOCATION, userPrevLocation);
         }else {
+            Log.d(USER_LOCATION, "was not null");
             outState.putParcelable(USER_LOCATION, usersLastLocation);
         }
 
