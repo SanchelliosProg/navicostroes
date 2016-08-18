@@ -148,7 +148,6 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
         currentFragment = StoreContactsFragment.newInstance(currentStore);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.store_details_container, currentFragment)
-                .addToBackStack(null)
                 .commit();
     }
 
@@ -157,7 +156,6 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
         currentFragment = InstrumentsListFragment.newInstance(currentStore.getInstruments());
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.store_details_container, currentFragment)
-                .addToBackStack(null)
                 .commit();
     }
 

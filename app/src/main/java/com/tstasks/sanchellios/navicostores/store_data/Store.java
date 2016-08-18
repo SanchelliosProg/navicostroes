@@ -5,7 +5,8 @@ import android.os.Parcelable;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.tstasks.sanchellios.navicostores.Transliterator;
+import com.tstasks.sanchellios.navicostores.translit_handling.NavicoTransliterator;
+import com.tstasks.sanchellios.navicostores.translit_handling.Transliterator;
 
 import java.util.ArrayList;
 
@@ -93,7 +94,7 @@ public class Store implements Parcelable{
     }
 
     public String getName() {
-        return Transliterator.getRussianString(name);
+        return NavicoTransliterator.getRussianString(name);
     }
 
     public void setName(String name) {

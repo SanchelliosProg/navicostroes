@@ -3,7 +3,8 @@ package com.tstasks.sanchellios.navicostores.data_binders;
 import android.content.Context;
 
 import com.tstasks.sanchellios.navicostores.R;
-import com.tstasks.sanchellios.navicostores.Transliterator;
+import com.tstasks.sanchellios.navicostores.translit_handling.NavicoTransliterator;
+import com.tstasks.sanchellios.navicostores.translit_handling.Transliterator;
 import com.tstasks.sanchellios.navicostores.store_data.Store;
 
 /**
@@ -26,7 +27,7 @@ public class StoreDataBindAdapter {
         if(string == null){
             return context.getResources().getString(R.string.no_data);
         }else {
-            return Transliterator.getRussianString(string);
+            return NavicoTransliterator.getRussianString(string);
         }
     }
 

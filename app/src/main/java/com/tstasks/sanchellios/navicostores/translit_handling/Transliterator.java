@@ -1,25 +1,11 @@
-package com.tstasks.sanchellios.navicostores;
+package com.tstasks.sanchellios.navicostores.translit_handling;
 
 /**
  * Created by alex on 17.08.16.
  */
 public class Transliterator {
-    public static String getRussianString(String translit){
-        String updatedString = translit.replaceAll("Ts", "Ц")
-                .replaceAll("ts", "ц")
-                .replaceAll("Ya", "Я")
-                .replaceAll("ya", "я")
-                .replaceAll("Ta", "Тя")
-                .replaceAll("ta", "тя")
-                .replaceAll("Ny", "Ный")
-                .replaceAll("ny", "ный")
-                .replaceAll("Sound", "Саунд")
-                .replaceAll("sound", "саунд");
-        return transliterate(updatedString);
-    }
-
-    private static String transliterate(String string){
-        String updatedString = string.replaceAll("A", "А")
+    protected static String transliterate(String string){
+        return string.replaceAll("A", "А")
                 .replaceAll("a", "а")
                 .replaceAll("B", "Б")
                 .replaceAll("b", "б")
@@ -87,6 +73,5 @@ public class Transliterator {
                 .replaceAll("yu", "ю")
                 .replaceAll("Ja", "Я")
                 .replaceAll("ja", "я");
-        return updatedString;
     }
 }
