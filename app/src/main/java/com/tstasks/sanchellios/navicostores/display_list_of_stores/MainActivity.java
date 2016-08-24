@@ -86,6 +86,7 @@ public class MainActivity extends AppCompatActivity
 
         mapStateRegister = new MapStateRegister();
         setTitle(R.string.list_of_stores_title);
+
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             createMapFragment();
         }
